@@ -1,0 +1,118 @@
+{
+  "name": "gacs",
+  "description": "platform engineering cli",
+  "version": "0.1.0",
+  "author": "",
+  "bin": {
+    "gacs": "./bin/run.js"
+  },
+  "bugs": "",
+  "dependencies": {
+    "@aws-sdk/client-ec2": "^3.654.0",
+    "@aws-sdk/client-ecs": "^3.654.0",
+    "@aws-sdk/client-lambda": "^3.665.0",
+    "@aws-sdk/client-opensearch": "^3.654.0",
+    "@aws-sdk/client-rds": "^3.654.0",
+    "@aws-sdk/client-ssm": "^3.654.0",
+    "@aws-sdk/client-sso": "^3.654.0",
+    "@aws-sdk/client-sso-oidc": "^3.654.0",
+    "@aws-sdk/client-sts": "^3.654.0",
+    "@oclif/core": "^4",
+    "@oclif/plugin-help": "^6",
+    "@oclif/plugin-plugins": "^5",
+    "@oclif/plugin-update": "^4.6.3",
+    "boxen": "^8.0.1",
+    "chalk": "^5.3.0",
+    "cli-table": "^0.3.11",
+    "enquirer": "^2.4.1",
+    "figlet": "^1.7.0",
+    "json-chalkify": "^1.0.2",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "@oclif/prettier-config": "^0.2.1",
+    "@oclif/test": "^4",
+    "@types/chai": "^4",
+    "@types/cli-table": "^0.3.4",
+    "@types/mocha": "^10",
+    "@types/node": "^18",
+    "chai": "^4",
+    "eslint": "^8",
+    "eslint-config-oclif": "^5",
+    "eslint-config-oclif-typescript": "^3",
+    "eslint-config-prettier": "^9",
+    "mocha": "^10",
+    "oclif": "^4",
+    "shx": "^0.3.3",
+    "ts-node": "^10",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "/bin",
+    "/dist",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "None",
+  "main": "dist/index.js",
+  "type": "module",
+  "oclif": {
+    "bin": "gacs",
+    "dirname": "gacs",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-update"
+    ],
+    "topicSeparator": " ",
+    "topics": {
+      "hello": {
+        "description": "Say hello to the world and others"
+      },
+      "sso": {
+        "description": "configure and use aws SSO"
+      },
+      "whoami": {
+        "description": "show current aws context"
+      }
+    },
+    "macos": {
+      "identifier": "com.gacs.cli"
+    },
+    "update": {
+      "s3": {
+        "bucket": "gacs-044826655386",
+        "host": "https://gacs-044826655386.s3.amazonaws.com",
+        "maybedefaulthost": "https://s3.console.aws.amazon.com/",
+        "acl": "private"
+      },
+      "node": {
+        "version": "22.9.0",
+        "targets": [
+          "darwin-arm64"
+        ]
+      }
+    }
+  },
+  "pkg": {
+    "scripts": "./dist/**/*.js"
+  },
+  "scripts": {
+    "build": "shx rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "npm run lint",
+    "prepack": "oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md",
+    "buildtgz": "oclif pack macos",
+    "uploadtgz": "oclif upload macos"
+  },
+  "types": "dist/index.d.ts"
+}

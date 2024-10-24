@@ -1,0 +1,8 @@
+{
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "valid-jsdoc": "off",
+    "unicorn/no-array-reduce": "off"
+  }
+}
