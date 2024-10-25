@@ -1,10 +1,10 @@
 {
-  "name": "gacs",
+  "name": "@davidpricedev/awsum",
   "description": "platform engineering cli",
   "version": "0.1.0",
   "author": "",
   "bin": {
-    "gacs": "./bin/run.js"
+    "awsum": "./bin/run.js"
   },
   "bugs": "",
   "dependencies": {
@@ -20,7 +20,6 @@
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^5",
-    "@oclif/plugin-update": "^4.6.3",
     "boxen": "^8.0.1",
     "chalk": "^5.3.0",
     "cli-table": "^0.3.11",
@@ -63,40 +62,16 @@
   "main": "dist/index.js",
   "type": "module",
   "oclif": {
-    "bin": "gacs",
-    "dirname": "gacs",
+    "bin": "awsum",
+    "dirname": "awsum",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-update"
+      "@oclif/plugin-help"
     ],
     "topicSeparator": " ",
     "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
-      },
       "sso": {
         "description": "configure and use aws SSO"
-      },
-      "whoami": {
-        "description": "show current aws context"
-      }
-    },
-    "macos": {
-      "identifier": "com.gacs.cli"
-    },
-    "update": {
-      "s3": {
-        "bucket": "gacs-044826655386",
-        "host": "https://gacs-044826655386.s3.amazonaws.com",
-        "maybedefaulthost": "https://s3.console.aws.amazon.com/",
-        "acl": "private"
-      },
-      "node": {
-        "version": "22.9.0",
-        "targets": [
-          "darwin-arm64"
-        ]
       }
     }
   },
@@ -110,9 +85,7 @@
     "posttest": "npm run lint",
     "prepack": "oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif readme && git add README.md",
-    "buildtgz": "oclif pack macos",
-    "uploadtgz": "oclif upload macos"
+    "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"
 }

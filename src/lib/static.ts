@@ -7,7 +7,7 @@ export const defaultRegion = "us-east-2";
 export const awsConfigFile = `${os.homedir()}/.aws/config`;
 
 // Shell command information
-export const cmdName = "gacs";
+export const cmdName = "awsum";
 export const functionFile = `.${cmdName}-shell-functions`;
 
 // A file for storing the name of the selected profile
