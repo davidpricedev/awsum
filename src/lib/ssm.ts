@@ -34,7 +34,7 @@ export const ensureSessionManagerPlugin = () => {
   const output = execCommand("which session-manager-plugin");
   if (!output) {
     console.error(
-      "Session Manager Plugin not found. See: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"
+      "Session Manager Plugin not found. See: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html",
     );
   }
 };

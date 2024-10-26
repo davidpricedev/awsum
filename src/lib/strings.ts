@@ -7,10 +7,7 @@ export const minIndent = (text: string) => {
     return 0;
   }
 
-  return match.reduce(
-    (r: any, a: any) => Math.min(r, a.length),
-    Number.POSITIVE_INFINITY
-  );
+  return match.reduce((r: any, a: any) => Math.min(r, a.length), Number.POSITIVE_INFINITY);
 };
 
 /**

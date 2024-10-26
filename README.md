@@ -106,6 +106,7 @@ _See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4
 
 - [awsum](#awsum)
   - [Dependencies](#dependencies)
+  - [Installation](#installation)
   - [Usage](#usage)
   - [Commands](#commands)
   - [`awsum help [COMMAND]`](#awsum-help-command)
@@ -153,14 +154,16 @@ Flags:
 ## Contributing
 
 - Clone the repo
-- `npm install` to install dependencies
-- `npm install -g oclif` for the oclif command line tools
-- `npm run build` to build the project
-- `bin/run.js ...` to run the cli tooling without installing it
+- Run `npm install` to install dependencies
+- Run `npm run prepare` - to install the pre-commit hooks that keep things nicely formatted
+- Run `npm install -g oclif` to install the oclif command line tools
+- Development Workflow
+  - `npm run build` to build the project
+  - `bin/run.js ...` to run the cli tooling without installing it
 
 ## [Publishing](./publishing.md)
 
 ## Future
 
 - switch to the built-in dataDir in oclif instead of custom file locations (`this.config.dataDir` and `this.config.configDir` within a command)
-- add common functionality for things like code artifact logins, ecr login, lambda invokes, ssm connections, etc.
+- add common functionality for common things beyond sso: code artifact logins, ecr login, lambda invokes, ssm connections, etc.

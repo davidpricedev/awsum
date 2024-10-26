@@ -47,7 +47,7 @@ export const getAwsContext = async (): Promise<AwsContext | undefined> => {
     let ssoRole = "";
     if (arn.split("/").length < 2 || arn.split("/")[1].split("_").length < 2) {
       console.warn(
-        `Unable to detect an SSO role in the ARN: ${arn}! Maybe you need to login with "aws sso login"?`
+        `Unable to detect an SSO role in the ARN: ${arn}! Maybe you need to login with "aws sso login"?`,
       );
     } else {
       ssoRole = arn.split("/")[1].split("_")[1];
@@ -74,7 +74,7 @@ export const ensureRegion = (): string => {
   let region = process.env.AWS_REGION;
   if (!region) {
     console.warn(
-      `AWS_REGION is not set, please set it to the region you wish to use. Defaulting to ${defaultRegion} for now`
+      `AWS_REGION is not set, please set it to the region you wish to use. Defaulting to ${defaultRegion} for now`,
     );
     region = defaultRegion;
     process.env.AWS_REGION = region;

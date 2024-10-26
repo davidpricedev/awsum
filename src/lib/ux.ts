@@ -8,10 +8,7 @@ const chalkifier = () => new JSONChalkify().chalkify;
 
 export const prettyJson = (jsonObj: object) => chalkifier()(jsonObj);
 
-export const showChoicePrompt = async (
-  question: string,
-  choices: string[]
-): Promise<string> => {
+export const showChoicePrompt = async (question: string, choices: string[]): Promise<string> => {
   const choiceQuestion = {
     choices,
     message: question,
@@ -25,7 +22,7 @@ export const showChoicePrompt = async (
 // similar to showChoicePrompt, but allows typing to filter choices
 export const showAutocompletePrompt = async (
   question: string,
-  choices: string[]
+  choices: string[],
 ): Promise<string> => {
   const choiceQuestion = {
     choices,
@@ -63,7 +60,7 @@ export const verticalTable = (data: any[]) => {
 export const prettyTable = (
   rowNameResolver: (entry: any) => string,
   data: any[],
-  headers?: string[]
+  headers?: string[],
 ) => {
   const headerRow = headers ?? Object.keys(data[0]);
   const table = new Table({ head: ["", ...headerRow] });

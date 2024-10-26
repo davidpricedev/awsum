@@ -1,8 +1,4 @@
-import {
-  ListAccountRolesCommand,
-  ListAccountsCommand,
-  SSOClient,
-} from "@aws-sdk/client-sso";
+import { ListAccountRolesCommand, ListAccountsCommand, SSOClient } from "@aws-sdk/client-sso";
 import {
   CreateTokenCommand,
   RegisterClientCommand,
@@ -41,7 +37,7 @@ export const registerClient = async (hostname: string) => {
 export const startDeviceAuthorization = async (
   clientId: string,
   clientSecret: string,
-  startUrl: string
+  startUrl: string,
 ) => {
   const client = getSsoOidcClient();
   const command = new StartDeviceAuthorizationCommand({
@@ -57,11 +53,7 @@ export const startDeviceAuthorization = async (
  * Third step in sso authentication. Requires the approval of the device code via external browser first
  * This step returns an access token that can be used to make authenticated requests
  */
-export const createToken = async (
-  clientId: string,
-  clientSecret: string,
-  deviceCode: string
-) => {
+export const createToken = async (clientId: string, clientSecret: string, deviceCode: string) => {
   const client = getSsoOidcClient();
   const command = new CreateTokenCommand({
     clientId,
@@ -87,9 +79,7 @@ export const getRoles = async (accessToken: string, accountId: string) => {
   return response;
 };
 
-export const fetchAccountsAndRoles = async (
-  accessToken: string
-): Promise<RoleInfo[]> => {
+export const fetchAccountsAndRoles = async (accessToken: string): Promise<RoleInfo[]> => {
   const accounts = (await getAccounts(accessToken ?? "")).accountList ?? [];
   console.log(`found ${accounts.length} accounts`);
 
@@ -98,8 +88,7 @@ export const fetchAccountsAndRoles = async (
     // Intentionally not parallelizing this to reduce chance of rate limiting
     const roles =
       // eslint-disable-next-line no-await-in-loop
-      (await getRoles(accessToken ?? "", account.accountId ?? "")).roleList ??
-      [];
+      (await getRoles(accessToken ?? "", account.accountId ?? "")).roleList ?? [];
     console.log(`found ${roles.length} roles in account ${account.accountId}`);
     accountsWithRoles.push({ ...account, roles });
   }
@@ -111,6 +100,6 @@ export const fetchAccountsAndRoles = async (
       accountName: account.accountName,
       profileName: `${account.accountName}.${role.roleName}`,
       roleName: role.roleName,
-    }))
+    })),
   );
 };

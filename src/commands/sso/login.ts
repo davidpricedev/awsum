@@ -25,7 +25,7 @@ export default class Login extends Command {
     const envProfile = process.env.AWS_PROFILE;
     if (!flags.profile && !envProfile) {
       this.error(
-        "No AWS profile specified, please use --profile or set AWS_PROFILE environment variable"
+        "No AWS profile specified, please use --profile or set AWS_PROFILE environment variable",
       );
     }
 

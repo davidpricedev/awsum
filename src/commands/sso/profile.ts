@@ -29,10 +29,7 @@ export default class Profile extends Command {
       this.error("No profiles found in ~/.aws/config");
     }
 
-    const choice = await showAutocompletePrompt(
-      "Choose the profile you want to use: ",
-      profiles
-    );
+    const choice = await showAutocompletePrompt("Choose the profile you want to use: ", profiles);
     // write to file
     setProfile(choice);
     writeProfileSelection(choice);

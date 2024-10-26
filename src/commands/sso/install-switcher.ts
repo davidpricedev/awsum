@@ -10,8 +10,7 @@ export default class InstallSwitcher extends Command {
     shell: Args.string({ description: "shell (bash or zsh)", required: true }),
   };
 
-  static description =
-    "Install a profile switcher function into your .zshr/.basrc file";
+  static description = "Install a profile switcher function into your .zshr/.basrc file";
 
   static examples = [`<%= config.bin %> <%= command.id %>`];
 

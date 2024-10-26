@@ -7,22 +7,15 @@ import {
 } from "@aws-sdk/client-lambda";
 import fs from "node:fs";
 
-export const listLambdaByPrefix = async (
-  prefix: string
-): Promise<FunctionConfiguration[]> => {
+export const listLambdaByPrefix = async (prefix: string): Promise<FunctionConfiguration[]> => {
   const client = new LambdaClient({});
   const result = await client.send(new ListFunctionsCommand({}));
   return (
-    result.Functions?.filter((f: FunctionConfiguration) =>
-      f.FunctionName?.startsWith(prefix)
-    ) || []
+    result.Functions?.filter((f: FunctionConfiguration) => f.FunctionName?.startsWith(prefix)) || []
   );
 };
 
-export const invokeLambda = async (
-  functionName: string,
-  eventFile: string
-): Promise<object> => {
+export const invokeLambda = async (functionName: string, eventFile: string): Promise<object> => {
   const client = new LambdaClient({});
 
   const fileExists = fs.existsSync(eventFile);

@@ -2,11 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import os from "node:os";
 import ora from "ora";
 
-import {
-  SsoMetadata,
-  appendProfiles,
-  overwriteProfiles,
-} from "../../lib/aws-config.js";
+import { SsoMetadata, appendProfiles, overwriteProfiles } from "../../lib/aws-config.js";
 import {
   createToken,
   fetchAccountsAndRoles,
@@ -17,12 +13,7 @@ import { execCommand } from "../../lib/shell.js";
 import { installFunctions } from "../../lib/shell-functions.js";
 import { cmdName, defaultRegion } from "../../lib/static.js";
 import { stripIndent } from "../../lib/strings.js";
-import {
-  infoBox,
-  prettyTable,
-  showChoicePrompt,
-  waitForEnter,
-} from "../../lib/ux.js";
+import { infoBox, prettyTable, showChoicePrompt, waitForEnter } from "../../lib/ux.js";
 
 // Running this too often might result in a rate limit error
 // > TooManyRequestsException: HTTP 429 Unknown Code
@@ -68,7 +59,7 @@ export default class Setup extends Command {
     const deviceAuthResult = await startDeviceAuthorization(
       clientId ?? "",
       clientSecret ?? "",
-      ssoMetadata.startUrl
+      ssoMetadata.startUrl,
     );
     const { deviceCode, verificationUriComplete: url } = deviceAuthResult;
     spinner.stop();
@@ -77,16 +68,12 @@ export default class Setup extends Command {
     // open url in a separate browser. linux/windows users may have to manually do this
     execCommand(`open ${url}`);
     await waitForEnter(
-      "Press enter to continue after approving the device code in your browser ..."
+      "Press enter to continue after approving the device code in your browser ...",
     );
 
     spinner.text = "Getting Accounts and Roles ...";
     spinner.start();
-    const { accessToken } = await createToken(
-      clientId ?? "",
-      clientSecret ?? "",
-      deviceCode ?? ""
-    );
+    const { accessToken } = await createToken(clientId ?? "", clientSecret ?? "", deviceCode ?? "");
     const roles = await fetchAccountsAndRoles(accessToken ?? "");
     spinner.stop();
     this.log("Accounts and Roles:");
@@ -94,7 +81,7 @@ export default class Setup extends Command {
 
     const profileDecision = await showChoicePrompt(
       "Do you wish to overwrite or append to your existing AWS config?",
-      ["overwrite", "append"]
+      ["overwrite", "append"],
     );
     if (profileDecision === "overwrite") {
       overwriteProfiles(ssoMetadata, roles);
@@ -104,7 +91,7 @@ export default class Setup extends Command {
 
     const shell = await showChoicePrompt(
       "What shell do you wish to install the profile switcher for?",
-      ["zsh", "bash", "skip"]
+      ["zsh", "bash", "skip"],
     );
     if (shell !== "skip") {
       installFunctions(shell);
@@ -124,10 +111,7 @@ export default class Setup extends Command {
   }
 }
 
-const ensureSsoMetadata = (
-  ssoRegion: string | undefined,
-  startUrl: string | undefined
-) => {
+const ensureSsoMetadata = (ssoRegion: string | undefined, startUrl: string | undefined) => {
   const ssoMetadata: SsoMetadata = {
     regionResolver(_roleInfo: any) {
       return process.env.AWS_DEFAULT_REGION || defaultRegion;
@@ -138,13 +122,13 @@ const ensureSsoMetadata = (
 
   if (!ssoMetadata.startUrl) {
     throw new Error(
-      "Missing start url parameter and AWS_DEFAULT_SSO_START_URL environment variable, one of the two is required"
+      "Missing start url parameter and AWS_DEFAULT_SSO_START_URL environment variable, one of the two is required",
     );
   }
 
   if (!ssoMetadata.ssoRegion) {
     throw new Error(
-      "Missing sso region paramter and AWS_DEFAULT_SSO_REGION environment variable, one of the two is required"
+      "Missing sso region paramter and AWS_DEFAULT_SSO_REGION environment variable, one of the two is required",
     );
   }
 

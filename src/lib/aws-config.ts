@@ -26,10 +26,7 @@ const buildSsoSession = ({ ssoRegion, startUrl }: SsoMetadata) => {
   return lines.join("\n");
 };
 
-const buildSessionLinkedProfile = (
-  { regionResolver }: SsoMetadata,
-  roleInfo: RoleInfo
-) => {
+const buildSessionLinkedProfile = ({ regionResolver }: SsoMetadata, roleInfo: RoleInfo) => {
   const { accountId, accountName, profileName, roleName } = roleInfo;
   const lines = [
     `[profile ${profileName}]`,
@@ -45,7 +42,7 @@ const buildSessionLinkedProfile = (
 
 const buildSelfContainedProfile = (
   { regionResolver, ssoRegion, startUrl }: SsoMetadata,
-  roleInfo: RoleInfo
+  roleInfo: RoleInfo,
 ) => {
   const { accountId, accountName, profileName, roleName } = roleInfo;
   const lines = [
@@ -62,31 +59,18 @@ const buildSelfContainedProfile = (
   return lines.join("\n");
 };
 
-const buildAppendProfiles = (
-  ssoMetadata: SsoMetadata,
-  profiles: RoleInfo[]
-) => {
-  const lines = [
-    "",
-    profiles.map((x) => buildSelfContainedProfile(ssoMetadata, x)).join("\n"),
-    "",
-  ];
+const buildAppendProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
+  const lines = ["", profiles.map((x) => buildSelfContainedProfile(ssoMetadata, x)).join("\n"), ""];
   return lines.join("\n");
 };
 
-export const appendProfiles = (
-  ssoMetadata: SsoMetadata,
-  profiles: RoleInfo[]
-) => {
+export const appendProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
   const configText = buildAppendProfiles(ssoMetadata, profiles);
   ensureAwsFolder();
   fs.appendFileSync(awsConfigFile, configText, { flag: "a" });
 };
 
-const buildOverwriteProfiles = (
-  ssoMetadata: SsoMetadata,
-  profiles: RoleInfo[]
-) => {
+const buildOverwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
   const lines = [
     buildSsoSession(ssoMetadata),
     profiles.map((x) => buildSessionLinkedProfile(ssoMetadata, x)).join("\n"),
@@ -95,10 +79,7 @@ const buildOverwriteProfiles = (
   return lines.join("\n");
 };
 
-export const overwriteProfiles = (
-  ssoMetadata: SsoMetadata,
-  profiles: RoleInfo[]
-) => {
+export const overwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
   const configText = buildOverwriteProfiles(ssoMetadata, profiles);
   ensureAwsFolder();
   fs.writeFileSync(awsConfigFile, configText, { flag: "w" });
@@ -127,12 +108,8 @@ export const findSsoConfigs = () => {
 
   const config = fs.readFileSync(awsConfigFile, "utf8");
   const lines = config.split("\n");
-  const regions = lines
-    .filter((x) => x.includes("sso_region"))
-    .map((x) => x.split(" = ")[1]);
-  const urls = lines
-    .filter((x) => x.includes("sso_start_url"))
-    .map((x) => x.split(" = ")[1]);
+  const regions = lines.filter((x) => x.includes("sso_region")).map((x) => x.split(" = ")[1]);
+  const urls = lines.filter((x) => x.includes("sso_start_url")).map((x) => x.split(" = ")[1]);
   return { regions, urls };
 };
 

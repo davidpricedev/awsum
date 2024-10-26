@@ -13,9 +13,7 @@ const writeCliConfig = (data: Config) => {
 const doesCliConfigExist = (): boolean => fs.existsSync(cliConfigFile);
 
 const readCliConfig = (): Config =>
-  doesCliConfigExist()
-    ? JSON.parse(fs.readFileSync(cliConfigFile, "utf8"))
-    : {};
+  doesCliConfigExist() ? JSON.parse(fs.readFileSync(cliConfigFile, "utf8")) : {};
 
 export const setProfile = (profile: string) => {
   const config = readCliConfig();

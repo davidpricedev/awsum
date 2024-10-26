@@ -3,8 +3,7 @@ import { execSync, spawn } from "node:child_process";
 /**
  * Executes a command and returns the stdout as a string
  */
-export const execCommand = (command: string): string =>
-  execSync(command, { encoding: "utf8" });
+export const execCommand = (command: string): string => execSync(command, { encoding: "utf8" });
 
 /**
  * Spawns a command and relays stdout/stderr

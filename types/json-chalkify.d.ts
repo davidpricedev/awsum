@@ -1,1 +1,1 @@
-declare module 'json-chalkify';
+declare module "json-chalkify";
