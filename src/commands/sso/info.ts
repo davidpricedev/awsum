@@ -3,7 +3,7 @@ import { Command } from "@oclif/core";
 import { getAwsContext } from "../../lib/aws-context.js";
 import { verticalTable } from "../../lib/ux.js";
 
-export default class Whoami extends Command {
+export default class Info extends Command {
   static args = {};
 
   static description = "Show current AWS context information";
@@ -19,13 +19,13 @@ export default class Whoami extends Command {
     }
 
     const tableStr = verticalTable([
-      { "region(cli)": results?.cliRegion },
-      { "region(sdk)": results?.sdkRegion },
-      { profile: results?.profile },
-      { ssoRole: results?.ssoRole },
-      { account: results?.account },
-      { userId: results?.userId },
-      { awsVars: results?.awsVars.join(",\n") },
+      { "region(cli)": results.cliRegion },
+      { "region(sdk)": results.sdkRegion },
+      { profile: results.profile },
+      { ssoRole: results.ssoRole },
+      { account: results.account },
+      { userId: results.userId },
+      { awsVars: results.awsVars.join(",\n") },
     ]);
     this.log(tableStr);
   }

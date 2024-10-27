@@ -1,0 +1,6 @@
+line-length: false
+no-hard-tabs: true
+ul-style:
+  style: consistent
+header-style:
+  style: atx

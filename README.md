@@ -1,9 +1,22 @@
 # awsum
 
+<!-- readme is partially auto-generated and the oclif generator doesn't follow the mdlint rules I'd prefer -->
+<!-- markdownlint-disable MD040 -->
+
 aws cli utility for sso
 
 This tool allows you to populate your ~/.aws/config with all the sso roles that you have access to - and makes it easy to switch between profiles.
 It uses [oclif](https://oclif.io/) as the cli framework to make things easy to develop and extend.
+
+Purpose and goals:
+
+- provide simple, opinionated ways to do common things with the aws cli
+- provide simple, opinionated ways to do common things with aws using the local shell
+- easy to install and update
+- easy to extend
+
+This tool has been initially developed on macos, ymmv on elsewhere.
+I'd be happy to accept contributions that enable or improve functionality on other systems.
 
 <!-- toc -->
 
@@ -28,7 +41,7 @@ $ npm install -g @davidpricedev/awsum
 $ awsum COMMAND
 running command...
 $ awsum (--version)
-awsum/0.1.0 darwin-arm64 node-v22.9.0
+@davidpricedev/awsum/0.1.0 darwin-arm64 node-v22.9.0
 $ awsum --help [COMMAND]
 USAGE
   $ awsum COMMAND
@@ -41,8 +54,20 @@ USAGE
 
 <!-- commands -->
 
-- [`awsum help [COMMAND]`](#awsum-help-command)
-- [`awsum update [CHANNEL]`](#awsum-update-channel)
+- [awsum](#awsum)
+  - [Dependencies](#dependencies)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Commands](#commands)
+  - [`awsum help [COMMAND]`](#awsum-help-command)
+  - [`awsum sso info`](#awsum-sso-info)
+  - [`awsum sso install-switcher SHELL`](#awsum-sso-install-switcher-shell)
+  - [`awsum sso login`](#awsum-sso-login)
+  - [`awsum sso profile`](#awsum-sso-profile)
+  - [`awsum sso setup`](#awsum-sso-setup)
+  - [Contributing](#contributing)
+  - [Publishing](#publishing)
+  - [Future](#future)
 
 ## `awsum help [COMMAND]`
 
@@ -64,102 +89,108 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.11/src/commands/help.ts)_
 
-## `awsum update [CHANNEL]`
+## `awsum sso info`
 
-update the awsum CLI
+Show current AWS context information
 
 ```
 USAGE
-  $ awsum update [CHANNEL] [--force |  | [-a | -v <value> | -i]] [-b ]
-
-FLAGS
-  -a, --available        See available versions.
-  -b, --verbose          Show more details about the available versions.
-  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
-  -v, --version=<value>  Install a specific version.
-      --force            Force a re-download of the requested version.
+  $ awsum sso info
 
 DESCRIPTION
-  update the awsum CLI
+  Show current AWS context information
 
 EXAMPLES
-  Update to the stable channel:
-
-    $ awsum update stable
-
-  Update to a specific version:
-
-    $ awsum update --version 1.0.0
-
-  Interactively select version:
-
-    $ awsum update --interactive
-
-  See available versions:
-
-    $ awsum update --available
+  $ awsum sso info
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v4.6.3/src/commands/update.ts)_
+## `awsum sso install-switcher SHELL`
 
-<!-- commandsstop -->
+Install a profile switcher function into your .zshr/.basrc file
 
-- [awsum](#awsum)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Commands](#commands)
-  - [`awsum help [COMMAND]`](#awsum-help-command)
-  - [`awsum update [CHANNEL]`](#awsum-update-channel)
-  - [`awsum sso setup`](#awsum-sso-setup)
-  - [`awsum sso login`](#awsum-sso-login)
-  - [`awsum sso profile`](#awsum-sso-profile)
-  - [`awsum sso installSwitcher`](#awsum-sso-installswitcher)
-  - [Contributing](#contributing)
-  - [Publishing](#publishing)
-  - [Future](#future)
+```
+USAGE
+  $ awsum sso install-switcher SHELL
 
-## `awsum sso setup`
+ARGUMENTS
+  SHELL  shell (bash or zsh)
 
-Usage:
+DESCRIPTION
+  Install a profile switcher function into your .zshr/.basrc file
 
-Arguments:
-
-Flags:
+EXAMPLES
+  $ awsum sso install-switcher
+```
 
 ## `awsum sso login`
 
-Usage:
+Login to AWS SSO
 
-Arguments:
+```
+USAGE
+  $ awsum sso login [-p <value>]
 
-Flags:
+FLAGS
+  -p, --profile=<value>  AWS profile to use
+
+DESCRIPTION
+  Login to AWS SSO
+
+EXAMPLES
+  $ awsum sso login
+```
 
 ## `awsum sso profile`
 
-Usage:
+choose an aws profile
 
-Arguments:
+```
+USAGE
+  $ awsum sso profile [-q]
 
-Flags:
+FLAGS
+  -q, --quiet  suppress text output
 
-## `awsum sso installSwitcher`
+DESCRIPTION
+  choose an aws profile
 
-Usage:
+EXAMPLES
+  $ awsum sso profile
+```
 
-Arguments:
+## `awsum sso setup`
 
-Flags:
+Sets up SSO for the first time
+
+```
+USAGE
+  $ awsum sso setup [-r <value>] [-s <value>]
+
+FLAGS
+  -r, --ssoRegion=<value>  sso region
+  -s, --startUrl=<value>   sso start url
+
+DESCRIPTION
+  Sets up SSO for the first time
+
+EXAMPLES
+  $ awsum sso setup
+```
+
+<!-- commandsstop -->
 
 ## Contributing
 
 - Clone the repo
 - Run `npm install` to install dependencies
-- Run `npm run prepare` - to install the pre-commit hooks that keep things nicely formatted
+- Run `npm run install-precommit` - to install the pre-commit hooks that keep things nicely formatted
+  - First install pre-commit, if you haven't yet, via `brew install pre-commit`
 - Run `npm install -g oclif` to install the oclif command line tools
+- Abide by the [code of conduct](https://opensource.creativecommons.org/community/code-of-conduct/)
 - Development Workflow
   - `npm run build` to build the project
   - `bin/run.js ...` to run the cli tooling without installing it
+  - add tests to the test folder corresponding to the command
 
 ## [Publishing](./publishing.md)
 
