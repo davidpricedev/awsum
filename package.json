@@ -89,7 +89,8 @@
     "version": "oclif readme && git add README.md",
     "format": "prettier --write .",
     "install-precommit": "pre-commit install",
-    "precommit": "pre-commit run  --all-files"
+    "precommit": "pre-commit run  --all-files",
+    "clean": "rm -rf dist && rm -rf node_modules && rm -rf tmp"
   },
   "types": "dist/index.d.ts"
 }
