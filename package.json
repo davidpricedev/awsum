@@ -1,11 +1,14 @@
 {
   "name": "@davidpricedev/awsum",
   "description": "platform engineering cli",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/davidpricedev/awsum.git"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "davidpricedev",
   "bin": {
     "awsum": "./bin/run.js"
