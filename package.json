@@ -1,8 +1,12 @@
 {
   "name": "@davidpricedev/awsum",
   "description": "platform engineering cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidpricedev/awsum.git"
+  },
   "version": "0.1.0",
-  "author": "",
+  "author": "davidpricedev",
   "bin": {
     "awsum": "./bin/run.js"
   },
@@ -59,7 +63,7 @@
   "keywords": [
     "oclif"
   ],
-  "license": "None",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "type": "module",
   "oclif": {
@@ -69,12 +73,7 @@
     "plugins": [
       "@oclif/plugin-help"
     ],
-    "topicSeparator": " ",
-    "topics": {
-      "sso": {
-        "description": "configure and use aws SSO"
-      }
-    }
+    "topicSeparator": " "
   },
   "pkg": {
     "scripts": "./dist/**/*.js"
@@ -93,7 +92,9 @@
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "install-precommit": "pre-commit install",
+    "precommit": "pre-commit run  --all-files",
+    "clean": "rm -rf dist && rm -rf node_modules && rm -rf tmp"
   },
   "types": "dist/index.d.ts"
 }
