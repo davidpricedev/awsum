@@ -1,12 +1,7 @@
 import boxen from "boxen";
 import Table from "cli-table";
 import enquirer from "enquirer";
-import JSONChalkify from "json-chalkify";
 import readline from "node:readline/promises";
-
-const chalkifier = () => new JSONChalkify().chalkify;
-
-export const prettyJson = (jsonObj: object) => chalkifier()(jsonObj);
 
 export const showChoicePrompt = async (question: string, choices: string[]): Promise<string> => {
   const choiceQuestion = {
