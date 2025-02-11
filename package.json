@@ -1,6 +1,9 @@
 {
   "name": "@davidpricedev/awsum",
   "description": "platform engineering cli",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/davidpricedev/awsum.git"
