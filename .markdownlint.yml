@@ -1,4 +1,6 @@
+---
 line-length: false
+MD013: false
 no-hard-tabs: true
 ul-style:
   style: consistent

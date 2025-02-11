@@ -1,6 +1,10 @@
 {
   "name": "@davidpricedev/awsum",
   "description": "platform engineering cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidpricedev/awsum.git"
+  },
   "version": "0.1.0",
   "author": "davidpricedev",
   "bin": {

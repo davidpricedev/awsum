@@ -18,6 +18,7 @@ Purpose and goals:
 This tool has been initially developed on macos, ymmv on elsewhere.
 I'd be happy to accept contributions that enable or improve functionality on other systems.
 
+<!-- markdownlint-disable -->
 <!-- toc -->
 
 - [awsum](#awsum)
@@ -104,6 +105,8 @@ EXAMPLES
   $ awsum sso info
 ```
 
+_See code: [src/commands/sso/info.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/info.ts)_
+
 ## `awsum sso install-switcher SHELL`
 
 Install a profile switcher function into your .zshr/.basrc file
@@ -121,6 +124,8 @@ DESCRIPTION
 EXAMPLES
   $ awsum sso install-switcher
 ```
+
+_See code: [src/commands/sso/install-switcher.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/install-switcher.ts)_
 
 ## `awsum sso login`
 
@@ -140,6 +145,8 @@ EXAMPLES
   $ awsum sso login
 ```
 
+_See code: [src/commands/sso/login.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/login.ts)_
+
 ## `awsum sso profile`
 
 choose an aws profile
@@ -157,6 +164,8 @@ DESCRIPTION
 EXAMPLES
   $ awsum sso profile
 ```
+
+_See code: [src/commands/sso/profile.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/profile.ts)_
 
 ## `awsum sso setup`
 
@@ -177,7 +186,10 @@ EXAMPLES
   $ awsum sso setup
 ```
 
+_See code: [src/commands/sso/setup.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/setup.ts)_
+
 <!-- commandsstop -->
+<!-- markdownlint-restore -->
 
 ## Contributing
 

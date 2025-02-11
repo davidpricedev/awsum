@@ -2,11 +2,11 @@
 name: Publish to NPM
 on:
   release:
-    types: [created]
+    types: [published]
   workflow_dispatch: # temp for troubleshooting
 
 jobs:
-  build:
+  deploy-npm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,5 +22,26 @@ jobs:
       - name: Publish package on NPM 📦
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        shell: bash
+        run: npm publish
+
+  deploy-github:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          registry-url: "https://npm.pkg.github.com"
+      - name: Install dependencies and build 🔧
+        shell: bash
+        run: npm ci && npm run build
+      - name: Publish package on github 📦
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: npm publish
