@@ -15,9 +15,9 @@ export interface RoleInfo {
   roleName: string;
 }
 
-const buildSsoSession = ({ ssoRegion, startUrl }: SsoMetadata) => {
+const buildSsoSession = (ssoName: string, { ssoRegion, startUrl }: SsoMetadata) => {
   const lines = [
-    "[sso-session mysso]",
+    `[sso-session ${ssoName}]`,
     `sso_start_url = ${startUrl}`,
     `sso_region = ${ssoRegion}`,
     "sso_registration_scopes = sso:account:access",
@@ -26,11 +26,15 @@ const buildSsoSession = ({ ssoRegion, startUrl }: SsoMetadata) => {
   return lines.join("\n");
 };
 
-const buildSessionLinkedProfile = ({ regionResolver }: SsoMetadata, roleInfo: RoleInfo) => {
+const buildSessionLinkedProfile = (
+  ssoName: string,
+  { regionResolver }: SsoMetadata,
+  roleInfo: RoleInfo,
+) => {
   const { accountId, accountName, profileName, roleName } = roleInfo;
   const lines = [
     `[profile ${profileName}]`,
-    `sso_session = mysso`,
+    `sso_session = ${ssoName}`,
     `sso_account_name = ${accountName}`,
     `sso_account_id = ${accountId}`,
     `sso_role_name = ${roleName}`,
@@ -71,9 +75,13 @@ export const appendProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) =
 };
 
 const buildOverwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
+  const { startUrl } = ssoMetadata;
+  // extract the name from the url
+  const urlNoScheme = startUrl.split("://")[1];
+  const ssoName = urlNoScheme.split(".")[0];
   const lines = [
-    buildSsoSession(ssoMetadata),
-    profiles.map((x) => buildSessionLinkedProfile(ssoMetadata, x)).join("\n"),
+    buildSsoSession(ssoName, ssoMetadata),
+    profiles.map((x) => buildSessionLinkedProfile(ssoName, ssoMetadata, x)).join("\n"),
     "",
   ];
   return lines.join("\n");
