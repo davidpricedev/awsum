@@ -1,6 +1,6 @@
 {
   "name": "@davidpricedev/awsum",
-  "description": "platform engineering cli",
+  "description": "Aws SSO Helper",
   "publishConfig": {
     "access": "public"
   },
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/davidpricedev/awsum.git"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "davidpricedev",
   "bin": {
     "awsum": "./bin/run.js"
@@ -32,6 +32,7 @@
     "cli-table": "^0.3.11",
     "enquirer": "^2.4.1",
     "figlet": "^1.7.0",
+    "ini": "^5.0.0",
     "json-chalkify": "^1.0.2",
     "ora": "^8.1.0"
   },
@@ -40,6 +41,7 @@
     "@oclif/test": "^4",
     "@types/chai": "^4",
     "@types/cli-table": "^0.3.4",
+    "@types/ini": "^4.1.1",
     "@types/mocha": "^10",
     "@types/node": "^18",
     "chai": "^4",

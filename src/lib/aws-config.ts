@@ -1,6 +1,8 @@
 import * as fs from "node:fs";
 
+import { fromIni } from "./ini-parser/parser.js";
 import { awsConfigFile } from "./static.js";
+// import ini from "ini";
 
 export interface SsoMetadata {
   regionResolver: (roleInfo: RoleInfo) => string;
@@ -93,8 +95,6 @@ export const overwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]
   fs.writeFileSync(awsConfigFile, configText, { flag: "w" });
 };
 
-// Maybe switch to using ini parser?
-// might be useful to set the region from the profile data
 export const readProfiles = (): string[] => {
   const exists = fs.existsSync(awsConfigFile);
   if (!exists) {
@@ -126,4 +126,17 @@ const ensureAwsFolder = () => {
   if (!fs.existsSync(folder)) {
     fs.mkdirSync(folder, { recursive: true });
   }
+};
+
+export const readConfig = () => {
+  const exists = fs.existsSync(awsConfigFile);
+  if (!exists) {
+    return [];
+  }
+
+  const configText = fs.readFileSync(awsConfigFile, "utf8");
+  // github's ini parser
+  // const config = ini.parse(configText);
+  // return config;
+  return fromIni(configText);
 };
