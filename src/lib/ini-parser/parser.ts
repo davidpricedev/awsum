@@ -28,13 +28,14 @@ interface IniHeader {
   type: string;
 }
 
-export const readConfig = (file: string): string => {
-  const exists = fs.existsSync(file);
+export const readConfig = (file?: string): string => {
+  const configFile = file || awsConfigFile;
+  const exists = fs.existsSync(configFile);
   if (!exists) {
     return "";
   }
 
-  return fs.readFileSync(awsConfigFile, "utf8");
+  return fs.readFileSync(configFile, "utf8");
 };
 
 const isSectionHeader = (line: string): boolean =>
