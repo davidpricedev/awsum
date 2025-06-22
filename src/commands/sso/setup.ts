@@ -10,7 +10,7 @@ import {
   startDeviceAuthorization,
 } from "../../lib/aws-sso.js";
 import { execCommand } from "../../lib/shell.js";
-import { installFunctions } from "../../lib/shell-functions.js";
+import { hasFunctionsFile, installFunctions } from "../../lib/shell-functions.js";
 import { cmdName, defaultRegion } from "../../lib/static.js";
 import { stripIndent } from "../../lib/strings.js";
 import {
@@ -86,8 +86,8 @@ export default class Setup extends Command {
     this.log(prettyTable((x) => x.profileName, roles));
 
     const profileDecision = await showChoicePrompt(
-      "Do you wish to overwrite or update your existing AWS config?",
-      ["overwrite", "append"],
+      "Do you wish to update or overwrite your existing AWS config?",
+      ["update", "overwrite"],
     );
     if (profileDecision === "overwrite") {
       overwriteProfiles(ssoMetadata, roles);
@@ -95,13 +95,14 @@ export default class Setup extends Command {
       updateProfiles(ssoMetadata, roles);
     }
 
-    // future: look to see if it is already installed, and skip if so
-    const shell = await showChoicePrompt(
-      "What shell do you wish to install the profile switcher for?",
-      ["zsh", "bash", "skip"],
-    );
-    if (shell !== "skip") {
-      installFunctions(shell);
+    if (!hasFunctionsFile()) {
+      const shell = await showChoicePrompt(
+        "What shell do you wish to install the profile switcher for?",
+        ["zsh", "bash", "skip"],
+      );
+      if (shell !== "skip") {
+        installFunctions(shell);
+      }
     }
 
     const shellFunctionName = `${cmdName}-sso-switch`;
