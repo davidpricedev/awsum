@@ -1,7 +1,5 @@
 import { Command, Flags } from "@oclif/core";
 
-import { execCommand } from "../../lib/shell.js";
-
 /**
  * Simply a proxy for `aws sso login`
  */
@@ -29,10 +27,6 @@ export default class Login extends Command {
       );
     }
 
-    if (flags.profile) {
-      execCommand(`aws sso login --profile ${flags.profile}`);
-    } else {
-      execCommand(`aws sso login`);
-    }
+    console.log("[deprecated] This command is deprecated, use `aws sso login` instead.");
   }
 }

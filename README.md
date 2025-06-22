@@ -20,8 +20,7 @@ I'd be happy to accept contributions that enable or improve functionality on oth
 
 <!-- markdownlint-disable -->
 <!-- toc -->
-
-- [awsum](#awsum)
+* [awsum](#awsum)
 <!-- tocstop -->
 
 ## Dependencies
@@ -36,39 +35,28 @@ install node, then install this package via `npm install -g @davidpricedev/awsum
 ## Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @davidpricedev/awsum
 $ awsum COMMAND
 running command...
 $ awsum (--version)
-@davidpricedev/awsum/0.1.0 darwin-arm64 node-v22.9.0
+@davidpricedev/awsum/0.1.2 darwin-arm64 node-v22.16.0
 $ awsum --help [COMMAND]
 USAGE
   $ awsum COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 ## Commands
 
 <!-- commands -->
-
-- [awsum](#awsum)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Commands](#commands)
-  - [`awsum help [COMMAND]`](#awsum-help-command)
-  - [`awsum sso info`](#awsum-sso-info)
-  - [`awsum sso install-switcher SHELL`](#awsum-sso-install-switcher-shell)
-  - [`awsum sso login`](#awsum-sso-login)
-  - [`awsum sso profile`](#awsum-sso-profile)
-  - [`awsum sso setup`](#awsum-sso-setup)
-  - [Contributing](#contributing)
-  - [Publishing](#publishing)
-  - [Future](#future)
+* [`awsum help [COMMAND]`](#awsum-help-command)
+* [`awsum sso info`](#awsum-sso-info)
+* [`awsum sso install-switcher SHELL`](#awsum-sso-install-switcher-shell)
+* [`awsum sso login`](#awsum-sso-login)
+* [`awsum sso profile`](#awsum-sso-profile)
+* [`awsum sso setup`](#awsum-sso-setup)
 
 ## `awsum help [COMMAND]`
 
@@ -105,7 +93,7 @@ EXAMPLES
   $ awsum sso info
 ```
 
-_See code: [src/commands/sso/info.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/info.ts)_
+_See code: [src/commands/sso/info.ts](https://github.com/davidpricedev/awsum/blob/v0.1.2/src/commands/sso/info.ts)_
 
 ## `awsum sso install-switcher SHELL`
 
@@ -125,7 +113,7 @@ EXAMPLES
   $ awsum sso install-switcher
 ```
 
-_See code: [src/commands/sso/install-switcher.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/install-switcher.ts)_
+_See code: [src/commands/sso/install-switcher.ts](https://github.com/davidpricedev/awsum/blob/v0.1.2/src/commands/sso/install-switcher.ts)_
 
 ## `awsum sso login`
 
@@ -145,7 +133,7 @@ EXAMPLES
   $ awsum sso login
 ```
 
-_See code: [src/commands/sso/login.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/login.ts)_
+_See code: [src/commands/sso/login.ts](https://github.com/davidpricedev/awsum/blob/v0.1.2/src/commands/sso/login.ts)_
 
 ## `awsum sso profile`
 
@@ -165,7 +153,7 @@ EXAMPLES
   $ awsum sso profile
 ```
 
-_See code: [src/commands/sso/profile.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/profile.ts)_
+_See code: [src/commands/sso/profile.ts](https://github.com/davidpricedev/awsum/blob/v0.1.2/src/commands/sso/profile.ts)_
 
 ## `awsum sso setup`
 
@@ -186,8 +174,7 @@ EXAMPLES
   $ awsum sso setup
 ```
 
-_See code: [src/commands/sso/setup.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/setup.ts)_
-
+_See code: [src/commands/sso/setup.ts](https://github.com/davidpricedev/awsum/blob/v0.1.2/src/commands/sso/setup.ts)_
 <!-- commandsstop -->
 <!-- markdownlint-restore -->
 

@@ -37,6 +37,16 @@ export const waitForEnter = async (message: string): Promise<void> => {
   await rl.question(message);
 };
 
+export const showTextPrompt = async (question: string): Promise<string> => {
+  const textQuestion = {
+    message: question,
+    name: "text",
+    type: "input",
+  };
+  const result = await enquirer.prompt(textQuestion);
+  return (result as any).text;
+};
+
 /**
  * Shows a vertical table with keys as the first column and values as the second column.
  */

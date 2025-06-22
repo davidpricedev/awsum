@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import os from "node:os";
 import ora from "ora";
 
-import { SsoMetadata, appendProfiles, overwriteProfiles } from "../../lib/aws-config.js";
+import { SsoMetadata, overwriteProfiles, updateProfiles } from "../../lib/aws-config.js";
 import {
   createToken,
   fetchAccountsAndRoles,
@@ -10,10 +10,16 @@ import {
   startDeviceAuthorization,
 } from "../../lib/aws-sso.js";
 import { execCommand } from "../../lib/shell.js";
-import { installFunctions } from "../../lib/shell-functions.js";
+import { hasFunctionsFile, installFunctions } from "../../lib/shell-functions.js";
 import { cmdName, defaultRegion } from "../../lib/static.js";
 import { stripIndent } from "../../lib/strings.js";
-import { infoBox, prettyTable, showChoicePrompt, waitForEnter } from "../../lib/ux.js";
+import {
+  infoBox,
+  prettyTable,
+  showChoicePrompt,
+  showTextPrompt,
+  waitForEnter,
+} from "../../lib/ux.js";
 
 // Running this too often might result in a rate limit error
 // > TooManyRequestsException: HTTP 429 Unknown Code
@@ -49,7 +55,7 @@ export default class Setup extends Command {
 
     const { flags } = await this.parse(Setup);
     const { ssoRegion, startUrl } = flags;
-    const ssoMetadata = ensureSsoMetadata(ssoRegion, startUrl);
+    const ssoMetadata = await ensureSsoMetadata(ssoRegion, startUrl);
     // Make sure everything is using the sso region
     process.env.AWS_REGION = ssoMetadata.ssoRegion;
     process.env.AWS_DEFAULT_REGION = ssoMetadata.ssoRegion;
@@ -80,38 +86,40 @@ export default class Setup extends Command {
     this.log(prettyTable((x) => x.profileName, roles));
 
     const profileDecision = await showChoicePrompt(
-      "Do you wish to overwrite or append to your existing AWS config?",
-      ["overwrite", "append"],
+      "Do you wish to update or overwrite your existing AWS config?",
+      ["update", "overwrite"],
     );
     if (profileDecision === "overwrite") {
       overwriteProfiles(ssoMetadata, roles);
     } else {
-      appendProfiles(ssoMetadata, roles);
+      updateProfiles(ssoMetadata, roles);
     }
 
-    const shell = await showChoicePrompt(
-      "What shell do you wish to install the profile switcher for?",
-      ["zsh", "bash", "skip"],
-    );
-    if (shell !== "skip") {
-      installFunctions(shell);
+    if (!hasFunctionsFile()) {
+      const shell = await showChoicePrompt(
+        "What shell do you wish to install the profile switcher for?",
+        ["zsh", "bash", "skip"],
+      );
+      if (shell !== "skip") {
+        installFunctions(shell);
+      }
     }
 
     const shellFunctionName = `${cmdName}-sso-switch`;
     const concludeMessage = stripIndent(`
-      All done. You can now use it!
-      To use it:
+      All done. You can now use your newly configured profiles!
+      To do so:
       Restart your shell or source the function file to register the profile-switcher function.
       Switch profiles by running "${shellFunctionName}".
       If you skipped installing the function, you can add it by running "${cmdName} sso install-switcher".
-      Login daily with "aws sso login" or "${cmdName} sso login".
-      Use "${cmdName} sso" to show your current information.
+      Login daily with "aws sso login".
+      Use "${cmdName} sso info" to show your current information.
     `);
     this.log(infoBox(concludeMessage));
   }
 }
 
-const ensureSsoMetadata = (ssoRegion: string | undefined, startUrl: string | undefined) => {
+const ensureSsoMetadata = async (ssoRegion: string | undefined, startUrl: string | undefined) => {
   const ssoMetadata: SsoMetadata = {
     regionResolver(_roleInfo: any) {
       return process.env.AWS_DEFAULT_REGION || defaultRegion;
@@ -121,15 +129,22 @@ const ensureSsoMetadata = (ssoRegion: string | undefined, startUrl: string | und
   };
 
   if (!ssoMetadata.startUrl) {
-    throw new Error(
-      "Missing start url parameter and AWS_DEFAULT_SSO_START_URL environment variable, one of the two is required",
+    const startUrl = await showTextPrompt(
+      "What is your SSO start URL? (e.g. https://my-sso-portal.awsapps.com/start)",
     );
+    if (startUrl.startsWith("https://")) {
+      console.log("Using SSO start URL:", startUrl);
+      ssoMetadata.startUrl = startUrl;
+    } else {
+      console.log("Using SSO start URL:", `https://${startUrl}`);
+      ssoMetadata.startUrl = `https://${startUrl}`;
+    }
   }
 
   if (!ssoMetadata.ssoRegion) {
-    throw new Error(
-      "Missing sso region paramter and AWS_DEFAULT_SSO_REGION environment variable, one of the two is required",
-    );
+    const ssoRegion = await showTextPrompt("What is your SSO region? (e.g. us-east-1)");
+    console.log("Using SSO region:", ssoRegion);
+    ssoMetadata.ssoRegion = ssoRegion;
   }
 
   return ssoMetadata;

@@ -32,6 +32,11 @@ export const installFunctions = (shell: string): void => {
   appendSourceToRc(shell);
 };
 
+export const hasFunctionsFile = (): boolean => {
+  const filename = `${os.homedir()}/${functionFile}`;
+  return fs.existsSync(filename);
+};
+
 export const appendSourceToRc = (shell: string): void => {
   const shellFileName = shell === "bash" ? ".bashrc" : ".zshrc";
   const fullShellRcName = `${os.homedir()}/${shellFileName}`;
