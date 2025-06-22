@@ -28,6 +28,12 @@ interface IniHeader {
   type: string;
 }
 
+export const emptyIniContent = (): IniContent => ({
+  profiles: {},
+  services: {},
+  ssoSessions: {},
+});
+
 export const readConfig = (file?: string): string => {
   const configFile = file || awsConfigFile;
   const exists = fs.existsSync(configFile);

@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import fs from "node:fs";
 import os from "node:os";
 
-import { readConfig, readProfiles } from "../../lib/aws-config.js";
+import { readConfig, readProfileNames } from "../../lib/aws-config.js";
 import { setProfile } from "../../lib/cli-config.js";
 import { selectedProfileFile } from "../../lib/static.js";
 import { showAutocompletePrompt } from "../../lib/ux.js";
@@ -24,7 +24,7 @@ export default class Profile extends Command {
 
   async run(): Promise<void> {
     const { flags } = await this.parse(Profile);
-    const profiles = readProfiles();
+    const profiles = readProfileNames();
     const fullConfig = readConfig();
     console.log("Full Config::", fullConfig);
     if (profiles.length === 0) {
