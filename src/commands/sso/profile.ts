@@ -25,8 +25,6 @@ export default class Profile extends Command {
   async run(): Promise<void> {
     const { flags } = await this.parse(Profile);
     const profiles = readProfiles();
-    const fullConfig = readConfig();
-    console.log("Full Config::", fullConfig);
     if (profiles.size === 0) {
       this.error("No profiles found in ~/.aws/config");
     }
