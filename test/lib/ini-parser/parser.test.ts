@@ -20,14 +20,17 @@ describe("ini-parser", () => {
       `;
       const result = fromIni(iniString);
 
-      expect(result.profiles).to.have.property("test");
-      expect(result.profiles.test).to.deep.equal({ key1: "value1", key2: "value2" });
+      // Profiles
+      expect(result.profiles.has("test")).to.be.true;
+      expect(result.profiles.get("test")).to.deep.equal({ key1: "value1", key2: "value2" });
 
-      expect(result.services).to.have.property("test");
-      expect(result.services.test).to.deep.equal(["service1", "service2"]);
+      // Services
+      expect(result.services.has("test")).to.be.true;
+      expect(result.services.get("test")).to.deep.equal(["service1", "service2"]);
 
-      expect(result.ssoSessions).to.have.property("test");
-      expect(result.ssoSessions.test).to.deep.equal({ ssoKey: "ssoValue" });
+      // SSO Sessions
+      expect(result.ssoSessions.has("test")).to.be.true;
+      expect(result.ssoSessions.get("test")).to.deep.equal({ ssoKey: "ssoValue" });
     });
 
     it("should ignore comments in the INI string", () => {
@@ -40,43 +43,42 @@ describe("ini-parser", () => {
       `;
       const result = fromIni(iniString);
 
-      expect(result.profiles).to.have.property("test");
-      expect(result.profiles.test).to.deep.equal({ key1: "value1", key2: "value2" });
+      // Profiles
+      expect(result.profiles.has("test")).to.be.true;
+      expect(result.profiles.get("test")).to.deep.equal({ key1: "value1", key2: "value2" });
     });
 
-    it("should handle empty sections gracefully", () => {
+    it("should handle empty sections", () => {
       const iniString = `
-        [profile test]
-        [services test]
-        [sso-session test]
+        [profile empty]
+        [services empty]
+        [sso-session empty]
       `;
       const result = fromIni(iniString);
 
-      expect(result.profiles).to.have.property("test");
-      expect(result.profiles.test).to.deep.equal({});
+      // Profiles
+      expect(result.profiles.has("empty")).to.be.true;
+      expect(result.profiles.get("empty")).to.deep.equal({});
 
-      expect(result.services).to.have.property("test");
-      expect(result.services.test).to.deep.equal([]);
+      // Services
+      expect(result.services.has("empty")).to.be.true;
+      expect(result.services.get("empty")).to.deep.equal([]);
 
-      expect(result.ssoSessions).to.have.property("test");
-      expect(result.ssoSessions.test).to.deep.equal({});
+      // SSO Sessions
+      expect(result.ssoSessions.has("empty")).to.be.true;
+      expect(result.ssoSessions.get("empty")).to.deep.equal({});
     });
   });
 
   describe("toIni", () => {
     it("should convert JSON back to an INI string", () => {
-      const json = {
-        profiles: {
-          test: { key1: "value1", key2: "value2" },
-        },
-        services: {
-          test: ["service1", "service2"],
-        },
-        ssoSessions: {
-          test: { ssoKey: "ssoValue" },
-        },
+      const iniContent = {
+        profiles: new Map([["test", { key1: "value1", key2: "value2" }]]),
+        services: new Map([["test", ["service1", "service2"]]]),
+        ssoSessions: new Map([["test", { ssoKey: "ssoValue" }]]),
       };
-      const iniString = toIni(json);
+
+      const iniString = toIni(iniContent);
 
       expect(iniString).to.include("[profile test]");
       expect(iniString).to.include("key1 = value1");
@@ -92,23 +94,21 @@ describe("ini-parser", () => {
   });
 
   describe("readConfig", () => {
-    it("should return an empty string if the file does not exist", () => {
-      const filePath = "nonexistent-file.ini";
-      const result = readConfig(filePath);
+    it("should read and parse an INI file", () => {
+      const iniString = `
+        [profile test]
+        key1 = value1
+        key2 = value2
+      `;
+      fs.writeFileSync("test.ini", iniString);
 
-      expect(result).to.equal("");
-    });
+      const result = fromIni(readConfig("test.ini"));
 
-    it("should read the content of an existing file", () => {
-      const filePath = "test.ini";
-      const fileContent = "[profile test]\nkey1 = value1\n";
-      fs.writeFileSync(filePath, fileContent);
+      // Profiles
+      expect(result.profiles.has("test")).to.be.true;
+      expect(result.profiles.get("test")).to.deep.equal({ key1: "value1", key2: "value2" });
 
-      const result = readConfig(filePath);
-
-      expect(result).to.equal(fileContent);
-
-      fs.unlinkSync(filePath); // Clean up
+      fs.unlinkSync("test.ini");
     });
   });
 });

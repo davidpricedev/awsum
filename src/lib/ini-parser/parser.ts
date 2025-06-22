@@ -136,16 +136,16 @@ const servicesToIni = (sectionName: string, content: string[]): string => {
 export const toIni = (config: IniContent): string => {
   const blocks: string[] = [];
 
-  for (const [ssoSessionName, section] of Object.entries(config.ssoSessions)) {
-    blocks.push(sectionToIni("sso-session", ssoSessionName, section));
+  for (const [name, value] of config.ssoSessions.entries()) {
+    blocks.push(sectionToIni("sso-session", name, value));
   }
 
-  for (const [profileName, section] of Object.entries(config.profiles)) {
-    blocks.push(sectionToIni("profile", profileName, section));
+  for (const [name, value] of config.profiles.entries()) {
+    blocks.push(sectionToIni("profile", name, value));
   }
 
-  for (const [serviceName, section] of Object.entries(config.services)) {
-    blocks.push(servicesToIni(serviceName, section));
+  for (const [name, value] of config.services.entries()) {
+    blocks.push(servicesToIni(name, value));
   }
 
   return blocks.join("\n");

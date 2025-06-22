@@ -7,8 +7,7 @@
     "strict": true,
     "target": "es2022",
     "moduleResolution": "nodenext",
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "composite": true
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["./types/**/*.d.ts", "./src/**/*"],
   "ts-node": {
