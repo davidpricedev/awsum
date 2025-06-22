@@ -69,14 +69,19 @@ const mergeProfiles = (
 ): IniContent => {
   const ssoName = objKeys(newSsoSession)[0];
   const ssoStartUrl = newSsoSession[ssoName].sso_start_url;
+  const newIniData = { ...iniData };
+
+  // merge profiles
   const unrelatedProfiles = objFilter(iniData.profiles, not(isEntryRelated(ssoName, ssoStartUrl)));
+  newIniData.profiles = { ...unrelatedProfiles, ...Object.assign({}, ...newProfiles) };
+
+  // merge sso sessions
   const unrelatedSsoSessions = objFilter(
     iniData.ssoSessions,
     not(isEntryRelated(ssoName, ssoStartUrl)),
   );
-  const newIniData = { ...iniData };
-  newIniData.profiles = { ...unrelatedProfiles, ...Object.assign({}, ...newProfiles) };
   newIniData.ssoSessions = { ...unrelatedSsoSessions, ...newSsoSession };
+
   return newIniData;
 };
 
@@ -95,6 +100,22 @@ export const updateProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) =
   const newSsoSession = buildSsoSession(ssoName, ssoMetadata);
   const config = readConfig();
   const updatedConfig = mergeProfiles(config, newProfiles, newSsoSession);
+  writeConfig(updatedConfig);
+};
+
+/**
+ * Overwrites any existing profile(s) and sso-session(s) with the new ones
+ */
+export const overwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
+  const ssoName = extractSsoName(ssoMetadata.startUrl);
+  const newProfiles = profiles.map((x) => buildProfile(ssoName, ssoMetadata, x));
+  const newSsoSession = buildSsoSession(ssoName, ssoMetadata);
+  const config = readConfig();
+  const updatedConfig = {
+    profiles: Object.assign({}, ...newProfiles),
+    services: config.services,
+    ssoSessions: newSsoSession,
+  };
   writeConfig(updatedConfig);
 };
 

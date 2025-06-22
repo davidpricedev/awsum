@@ -2,7 +2,7 @@ import { Command, Flags } from "@oclif/core";
 import os from "node:os";
 import ora from "ora";
 
-import { SsoMetadata, appendProfiles, overwriteProfiles } from "../../lib/aws-config.js";
+import { SsoMetadata, overwriteProfiles, updateProfiles } from "../../lib/aws-config.js";
 import {
   createToken,
   fetchAccountsAndRoles,
@@ -80,13 +80,13 @@ export default class Setup extends Command {
     this.log(prettyTable((x) => x.profileName, roles));
 
     const profileDecision = await showChoicePrompt(
-      "Do you wish to overwrite or append to your existing AWS config?",
+      "Do you wish to overwrite or update your existing AWS config?",
       ["overwrite", "append"],
     );
     if (profileDecision === "overwrite") {
       overwriteProfiles(ssoMetadata, roles);
     } else {
-      appendProfiles(ssoMetadata, roles);
+      updateProfiles(ssoMetadata, roles);
     }
 
     const shell = await showChoicePrompt(

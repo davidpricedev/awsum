@@ -10,6 +10,9 @@ import * as fs from "node:fs";
 
 import { awsConfigFile } from "../static.js";
 
+/**
+ * Represents the content of an AWS configuration file
+ */
 export interface IniContent {
   // [profile profileName] (also, a special case for [default])
   profiles: Record<string, IniSection>;
