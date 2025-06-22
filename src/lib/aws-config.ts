@@ -56,7 +56,7 @@ const unRelatedEntries = (
 ): Map<string, IniSection> => {
   const filtered = new Map<string, IniSection>();
   for (const [k, v] of profiles.entries()) {
-    if (v.sso_session === ssoName || v.sso_start_url === ssoStartUrl) {
+    if (v?.sso_session !== ssoName && v?.sso_start_url !== ssoStartUrl) {
       filtered.set(k, v);
     }
   }
