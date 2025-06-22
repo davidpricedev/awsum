@@ -20,8 +20,7 @@ I'd be happy to accept contributions that enable or improve functionality on oth
 
 <!-- markdownlint-disable -->
 <!-- toc -->
-
-- [awsum](#awsum)
+* [awsum](#awsum)
 <!-- tocstop -->
 
 ## Dependencies
@@ -36,39 +35,23 @@ install node, then install this package via `npm install -g @davidpricedev/awsum
 ## Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @davidpricedev/awsum
 $ awsum COMMAND
 running command...
 $ awsum (--version)
-@davidpricedev/awsum/0.1.0 darwin-arm64 node-v22.9.0
+@davidpricedev/awsum/0.1.2 darwin-arm64 node-v22.16.0
 $ awsum --help [COMMAND]
 USAGE
   $ awsum COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 ## Commands
 
 <!-- commands -->
-
-- [awsum](#awsum)
-  - [Dependencies](#dependencies)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Commands](#commands)
-  - [`awsum help [COMMAND]`](#awsum-help-command)
-  - [`awsum sso info`](#awsum-sso-info)
-  - [`awsum sso install-switcher SHELL`](#awsum-sso-install-switcher-shell)
-  - [`awsum sso login`](#awsum-sso-login)
-  - [`awsum sso profile`](#awsum-sso-profile)
-  - [`awsum sso setup`](#awsum-sso-setup)
-  - [Contributing](#contributing)
-  - [Publishing](#publishing)
-  - [Future](#future)
+* [`awsum help [COMMAND]`](#awsum-help-command)
 
 ## `awsum help [COMMAND]`
 
@@ -89,105 +72,6 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.11/src/commands/help.ts)_
-
-## `awsum sso info`
-
-Show current AWS context information
-
-```
-USAGE
-  $ awsum sso info
-
-DESCRIPTION
-  Show current AWS context information
-
-EXAMPLES
-  $ awsum sso info
-```
-
-_See code: [src/commands/sso/info.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/info.ts)_
-
-## `awsum sso install-switcher SHELL`
-
-Install a profile switcher function into your .zshr/.basrc file
-
-```
-USAGE
-  $ awsum sso install-switcher SHELL
-
-ARGUMENTS
-  SHELL  shell (bash or zsh)
-
-DESCRIPTION
-  Install a profile switcher function into your .zshr/.basrc file
-
-EXAMPLES
-  $ awsum sso install-switcher
-```
-
-_See code: [src/commands/sso/install-switcher.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/install-switcher.ts)_
-
-## `awsum sso login`
-
-Login to AWS SSO
-
-```
-USAGE
-  $ awsum sso login [-p <value>]
-
-FLAGS
-  -p, --profile=<value>  AWS profile to use
-
-DESCRIPTION
-  Login to AWS SSO
-
-EXAMPLES
-  $ awsum sso login
-```
-
-_See code: [src/commands/sso/login.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/login.ts)_
-
-## `awsum sso profile`
-
-choose an aws profile
-
-```
-USAGE
-  $ awsum sso profile [-q]
-
-FLAGS
-  -q, --quiet  suppress text output
-
-DESCRIPTION
-  choose an aws profile
-
-EXAMPLES
-  $ awsum sso profile
-```
-
-_See code: [src/commands/sso/profile.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/profile.ts)_
-
-## `awsum sso setup`
-
-Sets up SSO for the first time
-
-```
-USAGE
-  $ awsum sso setup [-r <value>] [-s <value>]
-
-FLAGS
-  -r, --ssoRegion=<value>  sso region
-  -s, --startUrl=<value>   sso start url
-
-DESCRIPTION
-  Sets up SSO for the first time
-
-EXAMPLES
-  $ awsum sso setup
-```
-
-_See code: [src/commands/sso/setup.ts](https://github.com/davidpricedev/awsum/blob/v0.1.0/src/commands/sso/setup.ts)_
-
 <!-- commandsstop -->
 <!-- markdownlint-restore -->
 

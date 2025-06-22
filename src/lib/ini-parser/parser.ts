@@ -15,11 +15,11 @@ import { awsConfigFile } from "../static.js";
  */
 export interface IniContent {
   // [profile profileName] (also, a special case for [default])
-  profiles: Record<string, IniSection>;
+  profiles: Map<string, IniSection>;
   // [services profileName] services are not parsed, but passed through as-is
-  services: Record<string, string[]>;
+  services: Map<string, string[]>;
   // [sso-session ssoName]
-  ssoSessions: Record<string, IniSection>;
+  ssoSessions: Map<string, IniSection>;
 }
 
 export interface IniSection {
@@ -32,9 +32,9 @@ interface IniHeader {
 }
 
 export const emptyIniContent = (): IniContent => ({
-  profiles: {},
-  services: {},
-  ssoSessions: {},
+  profiles: new Map<string, IniSection>(),
+  services: new Map<string, string[]>(),
+  ssoSessions: new Map<string, IniSection>(),
 });
 
 export const readConfig = (file?: string): string => {
@@ -79,11 +79,7 @@ export const fromIni = (config: string): IniContent => {
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.length > 0);
-  const configAsJson: IniContent = {
-    profiles: {},
-    services: {},
-    ssoSessions: {},
-  };
+  const configAsJson: IniContent = emptyIniContent();
   let currentSection: IniSection = {};
   let currentServices: string[] = [];
   let sectionType: keyof IniContent = "profiles";
@@ -96,11 +92,11 @@ export const fromIni = (config: string): IniContent => {
       const header = parseHeader(line);
       sectionType = sectionTypeToKey(header.type);
       if (sectionType === "services") {
-        currentServices = configAsJson.services[header.name] || [];
-        configAsJson.services[header.name] = currentServices;
+        currentServices = configAsJson.services.get(header.name) || [];
+        configAsJson.services.set(header.name, currentServices);
       } else {
-        currentSection = configAsJson[sectionType][header.name] || {};
-        configAsJson[sectionType][header.name] = currentSection;
+        currentSection = configAsJson[sectionType].get(header.name) || {};
+        configAsJson[sectionType].set(header.name, currentSection);
       }
     } else if (currentServices && sectionType === "services") {
       currentServices.push(line);

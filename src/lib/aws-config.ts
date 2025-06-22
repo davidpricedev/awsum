@@ -5,7 +5,6 @@ import * as path from "node:path";
 
 import { IniContent, IniSection, emptyIniContent, fromIni, toIni } from "./ini-parser/parser.js";
 import { awsConfigFile } from "./static.js";
-import { objFilter, objFilterFn, objKeys } from "./util.js";
 
 export interface SsoMetadata {
   regionResolver: (roleInfo: RoleInfo) => string;
@@ -23,40 +22,47 @@ export interface RoleInfo {
 const buildSsoSession = (
   ssoName: string,
   { ssoRegion, startUrl }: SsoMetadata,
-): Record<string, IniSection> => ({
-  [ssoName]: {
+): [string, IniSection] => [
+  ssoName,
+  {
     sso_region: ssoRegion,
     sso_registration_scopes: "sso:account:access",
     sso_start_url: startUrl,
   },
-});
+];
 
 const buildProfile = (
   ssoName: string,
   { regionResolver }: SsoMetadata,
   roleInfo: RoleInfo,
-): Record<string, IniSection> => {
+): [string, IniSection] => {
   const { accountId, accountName, profileName, roleName } = roleInfo;
-  return {
-    [profileName]: {
+  return [
+    profileName,
+    {
       region: regionResolver(roleInfo),
       sso_account_id: accountId,
       sso_account_name: accountName,
       sso_role_name: roleName,
       sso_session: ssoName,
     },
-  };
+  ];
 };
 
-const isEntryRelated =
-  (ssoName: string, ssoStartUrl: string) =>
-  (k: string, v: IniSection): boolean =>
-    v.sso_session === ssoName || v.sso_start_url === ssoStartUrl;
+const unRelatedEntries = (
+  ssoName: string,
+  ssoStartUrl: string,
+  profiles: Map<string, IniSection>,
+): Map<string, IniSection> => {
+  const filtered = new Map<string, IniSection>();
+  for (const [k, v] of profiles.entries()) {
+    if (v.sso_session === ssoName || v.sso_start_url === ssoStartUrl) {
+      filtered.set(k, v);
+    }
+  }
 
-const not =
-  (fn: objFilterFn<IniSection>) =>
-  (k: string, v: IniSection, i: number): boolean =>
-    !fn(k, v, i);
+  return filtered;
+};
 
 /**
  * Adds the new profiles and sso session to the existing structure
@@ -64,23 +70,20 @@ const not =
  */
 const mergeProfiles = (
   iniData: IniContent,
-  newProfiles: Array<Record<string, IniSection>>,
-  newSsoSession: Record<string, IniSection>,
+  newProfiles: Map<string, IniSection>,
+  newSsoSession: [string, IniSection],
 ): IniContent => {
-  const ssoName = objKeys(newSsoSession)[0];
-  const ssoStartUrl = newSsoSession[ssoName].sso_start_url;
+  const ssoName = newSsoSession[0];
+  const ssoStartUrl = newSsoSession[1].sso_start_url;
   const newIniData = { ...iniData };
 
   // merge profiles
-  const unrelatedProfiles = objFilter(iniData.profiles, not(isEntryRelated(ssoName, ssoStartUrl)));
-  newIniData.profiles = { ...unrelatedProfiles, ...Object.assign({}, ...newProfiles) };
+  const unrelatedProfiles = unRelatedEntries(ssoName, ssoStartUrl, iniData.profiles);
+  newIniData.profiles = new Map([...unrelatedProfiles, ...newProfiles]);
 
   // merge sso sessions
-  const unrelatedSsoSessions = objFilter(
-    iniData.ssoSessions,
-    not(isEntryRelated(ssoName, ssoStartUrl)),
-  );
-  newIniData.ssoSessions = { ...unrelatedSsoSessions, ...newSsoSession };
+  const unrelatedSessions = unRelatedEntries(ssoName, ssoStartUrl, iniData.ssoSessions);
+  newIniData.ssoSessions = new Map([...unrelatedSessions, newSsoSession]);
 
   return newIniData;
 };
@@ -96,7 +99,7 @@ const extractSsoName = (ssoStartUrl: string): string => {
  */
 export const updateProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
   const ssoName = extractSsoName(ssoMetadata.startUrl);
-  const newProfiles = profiles.map((x) => buildProfile(ssoName, ssoMetadata, x));
+  const newProfiles = new Map(profiles.map((x) => buildProfile(ssoName, ssoMetadata, x)));
   const newSsoSession = buildSsoSession(ssoName, ssoMetadata);
   const config = readConfig();
   const updatedConfig = mergeProfiles(config, newProfiles, newSsoSession);
@@ -108,20 +111,15 @@ export const updateProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) =
  */
 export const overwriteProfiles = (ssoMetadata: SsoMetadata, profiles: RoleInfo[]) => {
   const ssoName = extractSsoName(ssoMetadata.startUrl);
-  const newProfiles = profiles.map((x) => buildProfile(ssoName, ssoMetadata, x));
+  const newProfiles = new Map(profiles.map((x) => buildProfile(ssoName, ssoMetadata, x)));
   const newSsoSession = buildSsoSession(ssoName, ssoMetadata);
   const config = readConfig();
   const updatedConfig = {
-    profiles: Object.assign({}, ...newProfiles),
+    profiles: newProfiles,
     services: config.services,
-    ssoSessions: newSsoSession,
+    ssoSessions: new Map([newSsoSession]),
   };
   writeConfig(updatedConfig);
-};
-
-export const readProfileNames = (): string[] => {
-  const config = readConfig();
-  return objKeys(config.profiles);
 };
 
 const ensureAwsFolder = () => {
